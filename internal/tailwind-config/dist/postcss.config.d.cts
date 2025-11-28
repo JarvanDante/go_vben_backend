@@ -1,0 +1,2 @@
+export * from "/var/www/html/by_new/go_vben_backend/internal/tailwind-config/src/postcss.config.js";
+export { default } from "/var/www/html/by_new/go_vben_backend/internal/tailwind-config/src/postcss.config.js";
