@@ -1,4 +1,4 @@
-import { defineOverridesPreferences } from '@vben/preferences';
+import { defineOverridesPreferences } from "@vben/preferences";
 
 /**
  * @description 项目配置文件
@@ -9,5 +9,6 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     name: import.meta.env.VITE_APP_TITLE,
+    authPageLayout: "panel-center",
   },
 });

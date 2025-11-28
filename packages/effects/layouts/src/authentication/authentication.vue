@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { ToolbarType } from './types';
+import type { ToolbarType } from "./types";
 
-import { computed } from 'vue';
+import { computed } from "vue";
 
-import { preferences, usePreferences } from '@vben/preferences';
+import { preferences, usePreferences } from "@vben/preferences";
 
-import { Copyright } from '../basic/copyright';
-import AuthenticationFormView from './form.vue';
-import SloganIcon from './icons/slogan.vue';
-import Toolbar from './toolbar.vue';
+import { Copyright } from "../basic/copyright";
+import AuthenticationFormView from "./form.vue";
+import Toolbar from "./toolbar.vue";
 
 interface Props {
   appName?: string;
@@ -24,15 +23,15 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  appName: '',
+  appName: "",
   copyright: true,
-  logo: '',
-  logoDark: '',
-  pageDescription: '',
-  pageTitle: '',
-  sloganImage: '',
+  logo: "",
+  logoDark: "",
+  pageDescription: "",
+  pageTitle: "",
+  sloganImage: "",
   toolbar: true,
-  toolbarList: () => ['color', 'language', 'layout', 'theme'],
+  toolbarList: () => ["color", "language", "layout", "theme"],
   clickLogo: () => {},
 });
 
@@ -77,63 +76,6 @@ const logoSrc = computed(() => {
         </slot>
       </template>
     </AuthenticationFormView>
-
-    <slot name="logo">
-      <!-- 头部 Logo 和应用名称 -->
-      <div
-        v-if="logoSrc || appName"
-        class="absolute left-0 top-0 z-10 flex flex-1"
-        @click="clickLogo"
-      >
-        <div
-          class="text-foreground lg:text-foreground ml-4 mt-4 flex flex-1 items-center sm:left-6 sm:top-6"
-        >
-          <img
-            v-if="logoSrc"
-            :key="logoSrc"
-            :alt="appName"
-            :src="logoSrc"
-            class="mr-2"
-            width="42"
-          />
-          <p v-if="appName" class="m-0 text-xl font-medium">
-            {{ appName }}
-          </p>
-        </div>
-      </div>
-    </slot>
-
-    <!-- 系统介绍 -->
-    <div v-if="!authPanelCenter" class="relative hidden w-0 flex-1 lg:block">
-      <div
-        class="bg-background-deep absolute inset-0 h-full w-full dark:bg-[#070709]"
-      >
-        <div class="login-background absolute left-0 top-0 size-full"></div>
-        <div
-          :key="authPanelLeft ? 'left' : authPanelRight ? 'right' : 'center'"
-          class="flex-col-center mr-20 h-full"
-          :class="{
-            'enter-x': authPanelLeft,
-            '-enter-x': authPanelRight,
-          }"
-        >
-          <template v-if="sloganImage">
-            <img
-              :alt="appName"
-              :src="sloganImage"
-              class="animate-float h-64 w-2/5"
-            />
-          </template>
-          <SloganIcon v-else :alt="appName" class="animate-float h-64 w-2/5" />
-          <div class="text-1xl text-foreground mt-6 font-sans lg:text-2xl">
-            {{ pageTitle }}
-          </div>
-          <div class="dark:text-muted-foreground mt-2">
-            {{ pageDescription }}
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- 中心认证面板 -->
     <div v-if="authPanelCenter" class="flex-center relative w-full">
