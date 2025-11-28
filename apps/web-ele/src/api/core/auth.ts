@@ -1,8 +1,9 @@
-import { baseRequestClient, requestClient } from '#/api/request';
+import { baseRequestClient, requestClient } from "#/api/request";
 
 export namespace AuthApi {
   /** 登录接口参数 */
   export interface LoginParams {
+    code?: string;
     password?: string;
     username?: string;
   }
@@ -10,6 +11,7 @@ export namespace AuthApi {
   /** 登录接口返回值 */
   export interface LoginResult {
     accessToken: string;
+    token: string;
   }
 
   export interface RefreshTokenResult {
@@ -22,14 +24,18 @@ export namespace AuthApi {
  * 登录
  */
 export async function loginApi(data: AuthApi.LoginParams) {
-  return requestClient.post<AuthApi.LoginResult>('/auth/login', data);
+  const response = await requestClient.post<{ token: string }>("/login", data);
+  // 将后端返回的 token 转换为前端需要的 accessToken 格式
+  return {
+    accessToken: response.token,
+  };
 }
 
 /**
  * 刷新accessToken
  */
 export async function refreshTokenApi() {
-  return baseRequestClient.post<AuthApi.RefreshTokenResult>('/auth/refresh', {
+  return baseRequestClient.post<AuthApi.RefreshTokenResult>("/auth/refresh", {
     withCredentials: true,
   });
 }
@@ -38,7 +44,7 @@ export async function refreshTokenApi() {
  * 退出登录
  */
 export async function logoutApi() {
-  return baseRequestClient.post('/auth/logout', {
+  return baseRequestClient.post("/logout", {
     withCredentials: true,
   });
 }
@@ -47,5 +53,5 @@ export async function logoutApi() {
  * 获取用户权限码
  */
 export async function getAccessCodesApi() {
-  return requestClient.get<string[]>('/auth/codes');
+  return requestClient.get<string[]>("/auth/codes");
 }

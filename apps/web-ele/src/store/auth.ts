@@ -1,19 +1,19 @@
-import type { Recordable, UserInfo } from '@vben/types';
+import type { Recordable, UserInfo } from "@vben/types";
 
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-import { LOGIN_PATH } from '@vben/constants';
-import { preferences } from '@vben/preferences';
-import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
+import { LOGIN_PATH } from "@vben/constants";
+import { preferences } from "@vben/preferences";
+import { resetAllStores, useAccessStore, useUserStore } from "@vben/stores";
 
-import { ElNotification } from 'element-plus';
-import { defineStore } from 'pinia';
+import { ElNotification } from "element-plus";
+import { defineStore } from "pinia";
 
-import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
-import { $t } from '#/locales';
+import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from "#/api";
+import { $t } from "#/locales";
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore("auth", () => {
   const accessStore = useAccessStore();
   const userStore = useUserStore();
   const router = useRouter();
@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
    */
   async function authLogin(
     params: Recordable<any>,
-    onSuccess?: () => Promise<void> | void,
+    onSuccess?: () => Promise<void> | void
   ) {
     // 异步处理用户登录操作并获取 accessToken
     let userInfo: null | UserInfo = null;
@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
         // 获取用户信息并存储到 accessStore 中
         const [fetchUserInfoResult, accessCodes] = await Promise.all([
           fetchUserInfo(),
-          getAccessCodesApi(),
+          // getAccessCodesApi(),
         ]);
 
         userInfo = fetchUserInfoResult;
@@ -57,15 +57,17 @@ export const useAuthStore = defineStore('auth', () => {
           onSuccess
             ? await onSuccess?.()
             : await router.push(
-                userInfo.homePath || preferences.app.defaultHomePath,
+                userInfo.homePath || preferences.app.defaultHomePath
               );
         }
 
         if (userInfo?.realName) {
           ElNotification({
-            message: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-            title: $t('authentication.loginSuccess'),
-            type: 'success',
+            message: `${$t("authentication.loginSuccessDesc")}:${
+              userInfo?.realName
+            }`,
+            title: $t("authentication.loginSuccess"),
+            type: "success",
           });
         }
       }

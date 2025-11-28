@@ -1,6 +1,6 @@
-import { defineConfig } from '@vben/vite-config';
+import { defineConfig } from "@vben/vite-config";
 
-import ElementPlus from 'unplugin-element-plus/vite';
+import ElementPlus from "unplugin-element-plus/vite";
 
 export default defineConfig(async () => {
   return {
@@ -8,16 +8,16 @@ export default defineConfig(async () => {
     vite: {
       plugins: [
         ElementPlus({
-          format: 'esm',
+          format: "esm",
         }),
       ],
       server: {
         proxy: {
-          '/api': {
+          "/api": {
             changeOrigin: true,
-            rewrite: (path) => path.replace(/^\/api/, ''),
-            // mock代理目标地址
-            target: 'http://localhost:5320/api',
+            rewrite: (path) => path.replace(/^\/api/, "/api"),
+            // go_service 后端地址
+            target: "http://localhost:8000",
             ws: true,
           },
         },
