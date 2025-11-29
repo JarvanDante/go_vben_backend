@@ -25,6 +25,7 @@ export namespace AuthApi {
  */
 export async function loginApi(data: AuthApi.LoginParams) {
   const response = await requestClient.post<{ token: string }>("/login", data);
+  console.log("response:", response);
   // 将后端返回的 token 转换为前端需要的 accessToken 格式
   return {
     accessToken: response.token,

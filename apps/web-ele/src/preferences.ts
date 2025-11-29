@@ -10,5 +10,7 @@ export const overridesPreferences = defineOverridesPreferences({
   app: {
     name: import.meta.env.VITE_APP_TITLE,
     authPageLayout: "panel-center",
+    //#确保当前模式为后端访问控制模式
+    accessMode: "backend",
   },
 });
