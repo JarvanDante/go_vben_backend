@@ -24,7 +24,7 @@ export namespace MenuApi {
  */
 function convertMenuToRoute(
   menu: MenuApi.MenuItem,
-  parentPath?: string
+  isRoot: boolean = true
 ): RouteRecordRaw | null {
   // 只处理类型为 1 的菜单项（页面）
   if (menu.type !== 1) {
@@ -32,16 +32,21 @@ function convertMenuToRoute(
   }
 
   // 规范化路径
-  let normalizedPath = menu.frontend_url;
-  if (!normalizedPath.startsWith("/")) {
-    if (parentPath) {
-      const cleanParentPath = parentPath.endsWith("/")
-        ? parentPath.slice(0, -1)
-        : parentPath;
-      normalizedPath = cleanParentPath + "/" + normalizedPath;
-    } else {
+  let normalizedPath = menu.frontend_url || "";
+
+  if (!normalizedPath) {
+    return null;
+  }
+
+  if (isRoot) {
+    // 根菜单：使用完整路径
+    if (!normalizedPath.startsWith("/")) {
       normalizedPath = "/" + normalizedPath;
     }
+  } else {
+    // 子菜单：只使用路径的最后一段（相对路径）
+    const pathParts = normalizedPath.split("/");
+    normalizedPath = pathParts[pathParts.length - 1] || "";
   }
 
   const route: any = {
@@ -55,7 +60,7 @@ function convertMenuToRoute(
   // 如果有子菜单，递归转换
   if (menu.children && menu.children.length > 0) {
     const children = menu.children
-      .map((child) => convertMenuToRoute(child, normalizedPath))
+      .map((child) => convertMenuToRoute(child, false))
       .filter((route): route is RouteRecordRaw => route !== null);
 
     if (children.length > 0) {
@@ -64,7 +69,15 @@ function convertMenuToRoute(
       if (children[0]?.path) {
         route.redirect = children[0].path;
       }
+      // 有子菜单时，不设置 component，让 generateAccessible 自动处理
+      // route.component 会被 generateAccessible 中的代码删除
+    } else {
+      // 没有子菜单时，设置实际的页面组件
+      route.component = menu.frontend_url;
     }
+  } else {
+    // 没有子菜单时，设置实际的页面组件
+    route.component = menu.frontend_url;
   }
 
   return route;
@@ -83,7 +96,7 @@ export async function getAllMenusApi() {
 
     // 将菜单数据转换为路由格式
     const menuData = menuDataApi
-      .map((menu) => convertMenuToRoute(menu))
+      .map((menu) => convertMenuToRoute(menu, true))
       .filter((route): route is RouteRecordRaw => route !== null);
     console.log("menuData", menuData);
     return menuData;
