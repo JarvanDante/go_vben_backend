@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { CSSProperties } from 'vue';
+import type { CSSProperties } from "vue";
 
-import { computed, shallowRef, useSlots, watchEffect } from 'vue';
+import { computed, shallowRef, useSlots, watchEffect } from "vue";
 
-import { VbenScrollbar } from '@vben-core/shadcn-ui';
+import { VbenScrollbar } from "@vben-core/shadcn-ui";
 
-import { useScrollLock } from '@vueuse/core';
+import { useScrollLock } from "@vueuse/core";
 
-import { SidebarCollapseButton, SidebarFixedButton } from './widgets';
+import { SidebarCollapseButton, SidebarFixedButton } from "./widgets";
 
 interface Props {
   /**
@@ -105,11 +105,11 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{ leave: [] }>();
-const collapse = defineModel<boolean>('collapse');
-const extraCollapse = defineModel<boolean>('extraCollapse');
-const expandOnHovering = defineModel<boolean>('expandOnHovering');
-const expandOnHover = defineModel<boolean>('expandOnHover');
-const extraVisible = defineModel<boolean>('extraVisible');
+const collapse = defineModel<boolean>("collapse");
+const extraCollapse = defineModel<boolean>("extraCollapse");
+const expandOnHovering = defineModel<boolean>("expandOnHovering");
+const expandOnHover = defineModel<boolean>("expandOnHover");
+const extraVisible = defineModel<boolean>("extraVisible");
 
 const isLocked = useScrollLock(document.body);
 const slots = useSlots();
@@ -122,13 +122,13 @@ const style = computed((): CSSProperties => {
   const { isSidebarMixed, marginTop, paddingTop, zIndex } = props;
 
   return {
-    '--scroll-shadow': 'var(--sidebar)',
+    "--scroll-shadow": "var(--sidebar)",
     ...calcMenuWidthStyle(false),
     height: `calc(100% - ${marginTop}px)`,
     marginTop: `${marginTop}px`,
     paddingTop: `${paddingTop}px`,
     zIndex,
-    ...(isSidebarMixed && extraVisible.value ? { transition: 'none' } : {}),
+    ...(isSidebarMixed && extraVisible.value ? { transition: "none" } : {}),
   };
 });
 
@@ -163,16 +163,16 @@ const contentStyle = computed((): CSSProperties => {
 
   return {
     height: `calc(100% - ${headerHeight + collapseHeight}px)`,
-    paddingTop: '8px',
+    paddingTop: "8px",
     ...contentWidthStyle.value,
   };
 });
 
 const headerStyle = computed((): CSSProperties => {
   const { headerHeight, isSidebarMixed } = props;
-
+  console.log("+++++++", isSidebarMixed);
   return {
-    ...(isSidebarMixed ? { display: 'flex', justifyContent: 'center' } : {}),
+    ...(isSidebarMixed ? { display: "flex", justifyContent: "center" } : {}),
     height: `${headerHeight - 1}px`,
     ...contentWidthStyle.value,
   };
@@ -200,8 +200,11 @@ function calcMenuWidthStyle(isHiddenDom: boolean): CSSProperties {
 
   let widthValue =
     width === 0
-      ? '0px'
-      : `${width + (isSidebarMixed && fixedExtra && extraVisible.value ? extraWidth : 0)}px`;
+      ? "0px"
+      : `${
+          width +
+          (isSidebarMixed && fixedExtra && extraVisible.value ? extraWidth : 0)
+        }px`;
 
   const { collapseWidth } = props;
 
@@ -210,7 +213,7 @@ function calcMenuWidthStyle(isHiddenDom: boolean): CSSProperties {
   }
 
   return {
-    ...(widthValue === '0px' ? { overflow: 'hidden' } : {}),
+    ...(widthValue === "0px" ? { overflow: "hidden" } : {}),
     flex: `0 0 ${widthValue}`,
     marginLeft: show ? 0 : `-${widthValue}`,
     maxWidth: widthValue,
@@ -238,7 +241,7 @@ function handleMouseenter(e: MouseEvent) {
 }
 
 function handleMouseleave() {
-  emit('leave');
+  emit("leave");
   if (props.isSidebarMixed) {
     isLocked.value = false;
   }

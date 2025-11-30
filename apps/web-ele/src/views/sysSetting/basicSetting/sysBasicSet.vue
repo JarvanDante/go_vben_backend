@@ -10,7 +10,6 @@ const [BaseForm] = useVbenForm({
   },
   handleSubmit: onSubmit,
   layout: "horizontal",
-  wrapperClass: "grid-cols-1 p-0",
   schema: [
     {
       component: "Input",
@@ -45,6 +44,7 @@ const [BaseForm] = useVbenForm({
       },
       fieldName: "minWithdraw",
       label: "单笔最低提现金额",
+      suffix: () => "元",
     },
     {
       component: "InputNumber",
@@ -54,6 +54,7 @@ const [BaseForm] = useVbenForm({
       },
       fieldName: "maxWithdraw",
       label: "单笔最高提现金额",
+      suffix: () => "元",
     },
     {
       component: "Input",
@@ -114,6 +115,7 @@ const [BaseForm] = useVbenForm({
       },
       fieldName: "sameIpRegister",
       label: "同一IP重复注册",
+      suffix: () => "分钟",
     },
     {
       component: "RadioGroup",
@@ -150,6 +152,7 @@ const [BaseForm] = useVbenForm({
       label: "暂时关闭网站",
     },
   ],
+  wrapperClass: "grid-cols-1",
 });
 
 function onSubmit(values: Record<string, any>) {
@@ -160,28 +163,18 @@ function onSubmit(values: Record<string, any>) {
 </script>
 
 <template>
-  <div class="basic-setting-container">
-    <BaseForm />
+  <div class="p-4">
+    <div class="bg-white rounded-lg shadow-sm p-6 basic-setting-form">
+      <BaseForm />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.basic-setting-container {
-  padding: 0;
-  background: transparent;
-  border-radius: 0;
-
-  :deep(.vben-form-wrapper) {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  :deep(.vben-form-item) {
-    margin-bottom: 16px;
-  }
-
-  :deep(.vben-form-label) {
-    padding-right: 12px;
+.basic-setting-form {
+  :deep(.el-form-item__label) {
+    width: 160px !important;
+    white-space: nowrap;
   }
 }
 </style>
