@@ -3,6 +3,7 @@ import { ElMessage } from "element-plus";
 import { useVbenForm } from "#/adapter/form";
 
 const [BaseForm] = useVbenForm({
+  actionPosition: "center",
   commonConfig: {
     componentProps: {
       class: "w-full",
